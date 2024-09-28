@@ -24,9 +24,15 @@ jobs:
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
 
+      - name: Display Current Version
+        run: |
+          current_version=$(node -p "require('./package.json').version")
+          echo "current_version: $current_version"
+
       - name: Version Up
         run: |
           update_version=$(npm version patch --no-git-tag-version -m "chore(release): version up to %s")
+          echo "update_version: $update_version"
           echo "UPDATE_VERSION=$update_version" >> $GITHUB_ENV
 
       - name: Push Changes
@@ -35,4 +41,3 @@ jobs:
           echo "branch_name: $branch_name"
           git add package.json
           git commit -m "chore: version up to ${{ env.UPDATE_VERSION }}"
-          git push origin $branch_name
