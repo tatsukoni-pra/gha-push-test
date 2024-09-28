@@ -41,3 +41,4 @@ jobs:
           echo "branch_name: $branch_name"
           git add package.json
           git commit -m "chore: version up to ${{ env.UPDATE_VERSION }}"
+          git push origin $branch_name
