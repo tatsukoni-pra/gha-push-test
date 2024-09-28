@@ -32,4 +32,5 @@ jobs:
       - name: Push Changes
         run: |
           branch_name=$(git rev-parse --abbrev-ref HEAD)
+          echo "branch_name: $branch_name"
           git push origin $branch_name
