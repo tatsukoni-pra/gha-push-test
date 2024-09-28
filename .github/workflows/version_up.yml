@@ -27,10 +27,13 @@ jobs:
 
       - name: Version Up
         run: |
-          npm version patch --no-git-tag-version -m "chore(release): version up to %s"
+          update_version=$(npm version patch --no-git-tag-version -m "chore(release): version up to %s")
+          echo "UPDATE_VERSION=$update_version" >> $GITHUB_ENV
 
       - name: Push Changes
         run: |
           branch_name=$(git rev-parse --abbrev-ref HEAD)
           echo "branch_name: $branch_name"
+          git add package.json
+          git commit -m "chore: version up to ${{ env.UPDATE_VERSION }}"
           git push origin $branch_name
