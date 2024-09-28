@@ -1,0 +1,35 @@
+name: Npm Version Up
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      packages: write
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: git config
+        run: |
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+
+      - name: Version Up
+        run: |
+          npm version patch --no-git-tag-version -m "chore(release): version up to %s"
+
+      - name: Push Changes
+        run: |
+          branch_name=$(git rev-parse --abbrev-ref HEAD)
+          git push origin $branch_name
